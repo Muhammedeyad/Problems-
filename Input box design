@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Styled Input Box with Suggestions</title>
+    <style>
+        /* Style for the input box */
+        #searchInput {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Style when input box is focused */
+        #searchInput:focus {
+            border-color: #007BFF;
+            box-shadow: 0 6px 8px rgba(0, 123, 255, 0.2);
+        }
+
+        /* Styling the suggestions box */
+        #suggestions {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            max-height: 150px;
+            overflow-y: auto;
+            margin-top: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Styling individual suggestion items */
+        .suggestion-item {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #fff;
+        }
+
+        .suggestion-item:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="inputBox">
+        <input type="text" id="searchInput" placeholder="Search for items..." oninput="filterItems()">
+        <div id="suggestions"></div>
+    </div>
+
+    <script>
+        // Predefined list of items
+        const items = ["apple", "banana", "blueberry", "blackberry", "carrot", "cucumber", "grape", "mango", "melon", "orange", "peach", "pear", "pineapple"];
+
+        // Display all items initially
+        function displayAllItems() {
+            const suggestionBox = document.getElementById('suggestions');
+            suggestionBox.innerHTML = ''; // Clear suggestions box
+
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'suggestion-item';
+                div.innerText = item;
+                div.onclick = function() {
+                    document.getElementById('searchInput').value = item;
+                    suggestionBox.style.display = 'none'; // Hide suggestions when an item is clicked
+                };
+                suggestionBox.appendChild(div);
+            });
+
+            suggestionBox.style.display = 'block'; // Show all suggestions initially
+        }
+
+        // Filter items based on user input
+        function filterItems() {
+            const searchValue = document.getElementById('searchInput').value.toLowerCase();
+            const suggestionBox = document.getElementById('suggestions');
+
+            // Clear previous suggestions
+            suggestionBox.innerHTML = '';
+
+            if (searchValue) {
+                // Filter items that start with the typed value
+                const filteredItems = items.filter(item => item.startsWith(searchValue));
+
+                if (filteredItems.length > 0) {
+                    filteredItems.forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'suggestion-item';
+                        div.innerText = item;
+                        div.onclick = function() {
+                            document.getElementById('searchInput').value = item;
+                            suggestionBox.style.display = 'none';
+                        };
+                        suggestionBox.appendChild(div);
+                    });
+                    suggestionBox.style.display = 'block'; // Show filtered suggestions
+                } else {
+                    suggestionBox.style.display = 'none'; // Hide suggestions if no match
+                }
+            } else {
+                displayAllItems(); // Display all items if search box is cleared
+            }
+        }
+
+        // Display all items when the page loads
+        window.onload = displayAllItems;
+    </script>
+
+</body>
+</html>
