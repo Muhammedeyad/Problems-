@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Styled FAQ with Search</title>
+    <style>
+        /* Style for the input box */
+        #searchInput {
+            width: 100%;
+            max-width: 600px;
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        /* Style when input box is focused */
+        #searchInput:focus {
+            border-color: #007BFF;
+            box-shadow: 0 6px 8px rgba(0, 123, 255, 0.2);
+        }
+
+        /* FAQ section styling */
+        #faqSection {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .faq-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .faq-title {
+            font-weight: bold;
+            font-size: 20px;
+            cursor: pointer;
+            color: #007BFF;
+            margin-bottom: 10px;
+        }
+
+        .faq-description {
+            font-size: 16px;
+            display: none;
+            color: #333;
+        }
+
+        /* Simple fade-in animation for the description */
+        .faq-description.fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="inputBox">
+        <input type="text" id="searchInput" placeholder="Search FAQs..." oninput="filterFAQs()">
+    </div>
+
+    <div id="faqSection">
+        <div class="faq-item">
+            <div class="faq-title" onclick="toggleDescription(this)">How to reset my password?</div>
+            <div class="faq-description">To reset your password, go to the settings page and click 'Forgot Password'.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-title" onclick="toggleDescription(this)">How to update my profile?</div>
+            <div class="faq-description">To update your profile, click on the profile icon and select 'Edit Profile'.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-title" onclick="toggleDescription(this)">How to contact customer support?</div>
+            <div class="faq-description">You can contact customer support by clicking 'Help' at the bottom of the page.</div>
+        </div>
+    </div>
+
+    <script>
+        // Filter FAQ titles based on user input
+        function filterFAQs() {
+            const searchValue = document.getElementById('searchInput').value.toLowerCase();
+            const faqItems = document.querySelectorAll('.faq-item');
+
+            faqItems.forEach(faqItem => {
+                const faqTitle = faqItem.querySelector('.faq-title').innerText.toLowerCase();
+                if (faqTitle.includes(searchValue)) {
+                    faqItem.style.display = 'block'; // Show matching FAQ
+                } else {
+                    faqItem.style.display = 'none'; // Hide non-matching FAQ
+                }
+            });
+        }
+
+        // Toggle FAQ description display
+        function toggleDescription(faqTitleElement) {
+            const description = faqTitleElement.nextElementSibling;
+            if (description.style.display === 'none' || description.style.display === '') {
+                description.style.display = 'block';
+                description.classList.add('fade-in');
+            } else {
+                description.style.display = 'none';
+            }
+        }
+
+        // Initialize all FAQ descriptions as hidden
+        document.addEventListener('DOMContentLoaded', () => {
+            const faqDescriptions = document.querySelectorAll('.faq-description');
+            faqDescriptions.forEach(description => {
+                description.style.display = 'none';
+            });
+        });
+    </script>
+
+</body>
+</html>
